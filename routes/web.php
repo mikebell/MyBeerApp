@@ -17,8 +17,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/import', function () {
+Route::get('/import/{user}', function ($user) {
     $import = new ImportController();
-    $import->getData('eosph', 0);
+    $import->getData($user);
     return 'Hello World';
 });

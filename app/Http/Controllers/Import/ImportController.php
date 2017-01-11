@@ -16,7 +16,7 @@ class ImportController extends Controller
         $this->secret_id = env('UNTAPPD_SECRET', '');
     }
 
-    public function getData($user, $offset)
+    public function getData($user)
     {
         // @TODO write using the correct api endpoint.
 
@@ -26,21 +26,23 @@ class ImportController extends Controller
 
 //        $client = new GuzzleHttp\Client();
 
-//        var_dump($this->getUserData('eosph'));
         $user = $this->getMockUserData();
         $total_checkins = $user->response->user->stats->total_checkins;
-        $pager_size = round($total_checkins / 50);
 
-        var_dump($pager_size);
+        $offset = 0;
 
-//        while ($pager_size > 0 && $data == true) {
-//
-//        }
-
+        while ($offset <= $total_checkins) {
+            $data = $this->getCheckinData($user, $offset);
+            if ($data !== false) {
+                $data = json_decode($data);
+                $this->processData($data, $user);
+            }
+            $offset = $offset + 50;
+        }
 //        return $this->getMockData();
     }
 
-    public function getMockData()
+    public function getMockCheckinData()
     {
         $file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/temp/data.json');
         $file = json_decode($file);
@@ -108,5 +110,4 @@ class ImportController extends Controller
             return false;
         }
     }
-
 }
