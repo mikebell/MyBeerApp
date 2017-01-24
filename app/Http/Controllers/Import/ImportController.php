@@ -18,16 +18,12 @@ class ImportController extends Controller
 
     public function getData($user)
     {
-        // @TODO write using the correct api endpoint.
-
         // $data->meta->code = 200; all good.
 
         // $data->response->total_count / 50 - gets number of time need to loop through offset
 
-//        $client = new GuzzleHttp\Client();
-
-        $user = $this->getMockUserData();
-        $total_checkins = $user->response->user->stats->total_checkins;
+        $user_data = $this->getUserData($user);
+        $total_checkins = $user_data->response->user->stats->total_checkins;
 
         $offset = 0;
 
@@ -39,7 +35,6 @@ class ImportController extends Controller
             }
             $offset = $offset + 50;
         }
-//        return $this->getMockData();
     }
 
     public function getMockCheckinData()
