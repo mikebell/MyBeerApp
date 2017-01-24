@@ -24,5 +24,5 @@ Route::get('/import/{user}', function ($user) {
 });
 
 Route::get('user/{user}', function ($user) {
-    return 'Hello ' . $user;
+    return View::make('user', ['user' => $user]);
 });
