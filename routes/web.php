@@ -22,3 +22,7 @@ Route::get('/import/{user}', function ($user) {
     $import->getData($user);
     return 'Hello World';
 });
+
+Route::get('user/{user}'), function ($user) {
+    return 'Hello ' . $user;
+}
