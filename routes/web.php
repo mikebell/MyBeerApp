@@ -12,6 +12,7 @@
 */
 
 use App\Http\Controllers\Import\ImportController;
+use App\Http\Controllers\UserData\UserDataGenerator;
 
 Route::get('/', function () {
     return view('welcome');
@@ -24,5 +25,10 @@ Route::get('/import/{user}', function ($user) {
 });
 
 Route::get('user/{user}', function ($user) {
-    return View::make('user', ['user' => $user]);
+    $user_data = new UserDataGenerator($user);
+
+    return View::make('user', [
+        'user' => $user,
+        'user_total_checkins' => $user_data->totalCheckins()
+    ]);
 });
