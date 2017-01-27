@@ -1,3 +1,9 @@
-<p>Hello {{ user }}</p>
+{% extends "html.twig" %}
 
-<p>Total checkins - {{ user_total_checkins }}</p>
+{% block title %}{{ user }}{% endblock %}
+
+{% block content %}
+    <p>Hello {{ user }}</p>
+
+    <p>Total checkins - {{ user_total_checkins }}</p>
+{% endblock %}
