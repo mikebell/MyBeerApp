@@ -12,7 +12,7 @@ class BreweryStore extends Controller
     {
         // Check if record exists in the first place.
         $result = DB::table('brewery')
-          ->where('id', '=', $data->brewery->brewery_id)
+          ->where('id', '=', $data->brewery_id)
           ->exists();
 
         if (!$result) {
@@ -36,17 +36,15 @@ class BreweryStore extends Controller
             },
             "brewery_active":1
              */
-            $brewery_data = $data->brewery;
 
             $brewery = new Brewery();
-            $brewery->id = $brewery_data->brewery_id;
-            $brewery->name = $brewery_data->brewery_name;
-            $brewery->logo = $brewery_data->brewery_label;
-            $brewery->country = $brewery_data->country_name;
-            $brewery->location_lat = $brewery_data->location->lat;
-            $brewery->location_lon = $brewery_data->location->lng;
-            $brewery->active = $brewery_data->brewery_active;
-
+            $brewery->id = $data->brewery_id;
+            $brewery->name = $data->brewery_name;
+            $brewery->logo = $data->brewery_label;
+            $brewery->country = $data->country_name;
+            $brewery->location_lat = $data->location->lat;
+            $brewery->location_lon = $data->location->lng;
+            $brewery->active = $data->brewery_active;
 
             $brewery->save();
         }

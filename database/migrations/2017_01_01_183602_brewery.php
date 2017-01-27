@@ -35,7 +35,7 @@ class Brewery extends Migration
       "brewery_active":1
        */
         Schema::create('brewery', function (Blueprint $table) {
-            $table->increments('id');
+            $table->integer('id');
             $table->string('name');
             $table->string('logo');
             $table->string('country');

@@ -31,16 +31,16 @@ class Beer extends Migration
       },
        */
         Schema::create('beer', function (Blueprint $table) {
-            $table->increments('id');
+            $table->integer('id');
             $table->string('name');
             $table->string('label');
             $table->float('abv', 3, 1);
-            $table->float('ibu', 4, 1);
-            $table->string('style');
-            $table->longText('description');
-            $table->boolean('wish_list');
-            $table->double('rating_score', 5, 4);
-            $table->integer('rating_count');
+            $table->float('ibu', 4, 1)->nullable();
+            $table->string('style')->nullable();
+            $table->longText('description')->nullable();
+            $table->boolean('wish_list')->nullable();
+            $table->double('rating_score', 5, 4)->nullable();
+            $table->integer('rating_count')->nullable();
         });
     }
 

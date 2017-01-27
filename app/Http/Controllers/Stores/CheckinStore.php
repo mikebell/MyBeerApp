@@ -13,29 +13,20 @@ class CheckinStore extends Controller
     {
         // Check if record exists in the first place.
         $result = DB::table('checkin')
-          ->where('id', '=', $data->recent_checkin_id)
+          ->where('id', '=', $data->checkin_id)
           ->where('user', '=', $user)
           ->exists();
 
         if (!$result) {
             $checkin = new Checkin;
-            $checkin->id = $data->recent_checkin_id;
-            $checkin->first_checkin_id = $data->first_checkin_id;
+            $checkin->id = $data->checkin_id;
 
             // Convert date into unix timestamp;
-            $checkin->first_checkin_date = $this->convertDate($data->first_created_at);
+            $checkin->created_at = $this->convertDate($data->created_at);
 
-            $checkin->recent_checkin_id = $data->recent_checkin_id;
+            $checkin->rating_score = $data->rating_score;
 
-            $checkin->recent_checkin_date = $this->convertDate($data->recent_created_at);
-
-            $checkin->my_rating = $data->rating_score;
-
-            $checkin->first_checkin = $this->convertDate($data->first_had);
-
-            $checkin->total = $data->count;
-
-            $checkin->beer_id = $data->beer->bid;
+            $checkin->bid = $data->beer->bid;
 
             $checkin->user = $user;
 

@@ -12,23 +12,34 @@ class BeerStore extends Controller
     {
         // Check if record exists in the first place.
         $result = DB::table('beer')
-          ->where('id', '=', $data->beer->bid)
+          ->where('id', '=', $data->bid)
           ->exists();
 
         if (!$result) {
-            $beer_data = $data->beer;
-
             $beer = new Beer;
-            $beer->id = $beer_data->bid;
-            $beer->name = $beer_data->beer_name;
-            $beer->label = $beer_data->beer_label;
-            $beer->abv = $beer_data->beer_abv;
-            $beer->ibu = $beer_data->beer_ibu;
-            $beer->style = $beer_data->beer_style;
-            $beer->description = $beer_data->beer_description;
-            $beer->wish_list = $beer_data->wish_list;
-            $beer->rating_score = $beer_data->rating_score;
-            $beer->rating_count = $beer_data->rating_count;
+            $beer->id = $data->bid;
+            $beer->name = $data->beer_name;
+            $beer->label = $data->beer_label;
+            $beer->abv = $data->beer_abv;
+
+            if (isset($beer->ibu)) {
+                $beer->ibu = $data->beer_ibu;
+            }
+            if (isset($beer->style)) {
+                $beer->style = $data->beer_style;
+            }
+            if (isset($beer->description)) {
+                $beer->description = $data->beer_description;
+            }
+            if (isset($beer->wish_list)) {
+                $beer->wish_list = $data->wish_list;
+            }
+            if (isset($beer->rating_score)) {
+                $beer->rating_score = $data->rating_score;
+            }
+            if (isset($beer->rating_count)) {
+                $beer->rating_count = $data->rating_count;
+            }
 
             $beer->save();
         }
