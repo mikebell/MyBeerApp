@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Stores\BreweryStore;
 use App\Http\Controllers\Stores\CheckinStore;
 use App\Http\Controllers\Stores\BeerStore;
+use App\ImportData;
 use GuzzleHttp;
 
 class ImportController extends Controller
 {
     public $max_id = false;
+    public $min_id = false;
 
     public function __construct()
     {
@@ -20,10 +22,28 @@ class ImportController extends Controller
 
     public function getData($user)
     {
-        do {
-            $data = $this->getCheckinData($user, $this->max_id);
-            $this->processData($data, $user);
-        } while ($this->max_id != false);
+        // Get last checkin id if possible.
+        $last_updated_id = ImportData::where('user', $user)->first();
+
+        if (isset($last_updated_id->last_updated_id)) {
+            // This is an update run.
+            do {
+                $data = $this->getCheckinUpdateData($user, $this->min_id);
+                $this->processData($data, $user);
+                if ($this->min_id !== false) {
+                    ImportData::where('user', $user)
+                      ->update(['last_updated_id' => $this->min_id]);
+                }
+            } while ($this->min_id != false);
+        } else {
+            // This is a new user run.
+            do {
+                $data = $this->getCheckinData($user, $this->max_id);
+                $this->processData($data, $user);
+                ImportData::where('user', $user)
+                  ->update(['last_updated_id' => $last_updated_id->last_updated_id]);
+            } while ($this->max_id != false);
+        }
     }
 
     public function processData($data, $user)
@@ -119,6 +139,36 @@ class ImportController extends Controller
                 $this->max_id = false;
             } else {
                 $this->max_id = $data_decode->response->pagination->max_id;
+            }
+            return $data_decode;
+        } else {
+            return false;
+        }
+    }
+
+    public function getCheckinUpdateData($user, $min_id)
+    {
+        $client = new GuzzleHttp\Client(['base_uri' => 'https://api.untappd.com/v4/']);
+
+        $res = $client->request('GET', 'user/checkins/' . $user, [
+          'query' => [
+            'client_id' => $this->client_id,
+            'client_secret' => $this->secret_id,
+            'limit' => 50,
+            'min_id' => $min_id
+          ],
+        ]);
+
+        if ($res->getStatusCode() == 200) {
+            $data = (string) $res->getBody();
+            $data_decode = json_decode($data);
+            echo '<pre>';
+            print_r($data);
+            echo '</pre>';
+            if (isset($data_decode->response->pagination->min_id)) {
+                $this->min_id = $data_decode->response->pagination->min_id;
+            } else {
+//                return $this->min_id = false;
             }
             return $data_decode;
         } else {
