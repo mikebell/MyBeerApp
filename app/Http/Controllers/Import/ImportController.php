@@ -26,22 +26,6 @@ class ImportController extends Controller
         } while ($this->max_id != false);
     }
 
-    public function getMockCheckinData()
-    {
-        $file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/temp/data.json');
-        $file = json_decode($file);
-
-        return $file;
-    }
-
-    public function getMockUserData()
-    {
-        $file = file_get_contents($_SERVER['DOCUMENT_ROOT'] . '/temp/userdata.json');
-        $file = json_decode($file);
-
-        return $file;
-    }
-
     public function processData($data, $user)
     {
         foreach ($data->response->checkins->items as $beer) {
