@@ -25,6 +25,8 @@ class ImportController extends Controller
         // Get last checkin id if possible.
         $last_updated_id = ImportData::where('user', $user)->first();
 
+        // @TODO rewrite this entire pile of crap.
+
         if (isset($last_updated_id->last_updated_id)) {
             // This is an update run.
             do {
@@ -40,8 +42,10 @@ class ImportController extends Controller
             do {
                 $data = $this->getCheckinData($user, $this->max_id);
                 $this->processData($data, $user);
-                ImportData::where('user', $user)
-                  ->update(['last_updated_id' => $last_updated_id->last_updated_id]);
+                ImportData::firstOrCreate([
+                    'user' => $user,
+                    'last' => $last_updated_id->last_updated_id,
+                ]);
             } while ($this->max_id != false);
         }
     }
