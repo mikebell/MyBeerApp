@@ -1,0 +1,22 @@
+{% extends "html.twig" %}
+
+{% block title %}Beers in {{ year }}{% endblock %}
+
+{% block content %}
+    <h1>{{ user }} beers in {{ year }}</h1>
+
+    {% for beer in data %}
+        <div class="row">
+            <div class="col-2">
+                <h2><span class="badge badge-primary">{{ beer.rating_score }}</span></h2>
+            </div>
+            <div class="col-2">
+                <img src="{{ beer.beer.label }}" alt="{{ beer.beer.name }}" width="100px" height="100px">
+            </div>
+            <div class="col-6">
+                <p>{{ beer.date }}</p>
+                <p>{{ beer.beer.name }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

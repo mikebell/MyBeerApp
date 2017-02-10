@@ -15,7 +15,7 @@ use App\Http\Controllers\Import\ImportController;
 use App\Http\Controllers\UserData\UserDataGenerator;
 
 Route::get('/', function () {
-    return view('welcome');
+    return "hello world";
 });
 
 Route::get('/import/{user}', function ($user) {
@@ -30,5 +30,21 @@ Route::get('user/{user}', function ($user) {
     return View::make('user', [
         'user' => $user,
         'user_total_checkins' => $user_data->totalCheckins()
+    ]);
+});
+
+Route::get('user/{user}/{year}', function ($user, $year) {
+    $user_data = new UserDataGenerator($user);
+    $checkins = $user_data->getCheckinsByYear($user, $year);
+
+    echo "<pre>";
+//    print_r($checkins);
+    echo "</pre>";
+
+
+    return View::make('user-year', [
+        'year' => $checkins->year,
+        'user' => $user,
+        'data' => $checkins,
     ]);
 });
