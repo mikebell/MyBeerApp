@@ -1,0 +1,37 @@
+version : '2'
+
+services:
+  db:
+    image: mysql:5.7
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: beer
+      MYSQL_USER: beer
+      MYSQL_PASSWORD: beer
+
+  web:
+    image: nginx:latest
+    ports:
+        - "8080:80"
+    volumes:
+        - ./:/code
+        - ./site.conf:/etc/nginx/conf.d/default.conf
+    links:
+        - php
+
+  php:
+    build:
+        context: ./
+        dockerfile: ./php.dockerfile
+    volumes:
+        - ./:/code
+    links:
+      - db
+
+volumes:
+    db_data:
