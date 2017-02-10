@@ -3,7 +3,16 @@
 {% block title %}{{ user }}{% endblock %}
 
 {% block content %}
-    <p>Hello {{ user }}</p>
+    <div class="row">
+        <h1>{{ user }} profile</h1>
+    </div>
+    <div class="row">
+        <p>Total checkins - {{ user_total_checkins }}</p>
+    </div>
 
-    <p>Total checkins - {{ user_total_checkins }}</p>
+    {% for year in years_active %}
+        <div class="row">
+            <a href="/user/{{ user }}/{{ year }}">{{ year }}</a>
+        </div>
+    {% endfor %}
 {% endblock %}
