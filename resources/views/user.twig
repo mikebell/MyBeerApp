@@ -12,7 +12,9 @@
 
     {% for year in years_active %}
         <div class="row">
-            <a href="/user/{{ user }}/{{ year }}">{{ year }}</a>
+            <p>
+                <a href="/user/{{ user }}/{{ year }}">{{ year }}</a> - <a href="/user/{{ user }}/{{ year }}/stats">Stats</a>
+            </p>
         </div>
     {% endfor %}
 {% endblock %}
